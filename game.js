@@ -1520,6 +1520,13 @@ function closePanels() {
   panelOpen = null;
   ['timelinePanel', 'scrollPanel', 'helpPanel', 'pausePanel'].forEach(id => document.getElementById(id).classList.add('hidden'));
   document.getElementById('scrollReader').classList.add('hidden');
+  // 타이틀에서 띄웠던 도움말이면 타이틀 복원
+  const titleEl = document.getElementById('title');
+  const helpEl = document.getElementById('helpPanel');
+  if (state === 'title' && helpEl.classList.contains('from-title')) {
+    helpEl.classList.remove('from-title');
+    titleEl.classList.remove('fade');
+  }
 }
 function togglePause(force) {
   if (state !== 'play') return;
@@ -1597,7 +1604,17 @@ function respawn() {
 }
 document.getElementById('btnNew').onclick = () => startGame(false);
 document.getElementById('btnContinue').onclick = () => startGame(true);
-document.getElementById('btnHelpT').onclick = () => { document.getElementById('helpPanel').classList.remove('hidden'); panelOpen = 'help'; };
+document.getElementById('btnHelpT').onclick = () => {
+  // 타이틀 화면에서는 타이틀을 페이드아웃하고 도움말 패널을 단독으로 보여줌
+  const titleEl = document.getElementById('title');
+  const helpEl = document.getElementById('helpPanel');
+  if (state === 'title') {
+    titleEl.classList.add('fade');
+    helpEl.classList.add('from-title');
+  }
+  helpEl.classList.remove('hidden');
+  panelOpen = 'help';
+};
 document.getElementById('btnRespawn').onclick = respawn;
 document.getElementById('btnAgain').onclick = () => location.reload();
   // 캔버스를 클릭하여 대화/컷신 진행

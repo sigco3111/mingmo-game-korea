@@ -98,9 +98,19 @@ canvas#game { position:fixed; inset:0; display:block; cursor:crosshair; }
 
 /* ---------- 标题 ---------- */
 #title { position:fixed; inset:0; z-index:70; display:flex; align-items:center; justify-content:center;
-  background:radial-gradient(ellipse at 50% 30%, rgba(30,26,32,.25), rgba(4,5,8,.72) 75%); }
+  background:radial-gradient(ellipse at 50% 30%, rgba(30,26,32,.25), rgba(4,5,8,.72) 75%);
+  transition:opacity .35s ease; }
+#title.fade { opacity:0; pointer-events:none; }
 #titleInner { text-align:center; animation:titleIn 1.2s ease-out; }
 @keyframes titleIn { from { opacity:0; transform:translateY(24px);} to { opacity:1; transform:none;} }
+
+/* 메인메뉴에서 띄운 도움말 패널: 타이틀 텍스트와 안 겹치게 위쪽으로, 살짝 위로 정렬 */
+#helpPanel.from-title {
+  top:14%;
+  transform:translate(-50%, 0);
+  animation:none;
+}
+#helpPanel.from-title h2 { color:#e8c04a; }
 #titleEra { color:#b03a2e; font-size:22px; letter-spacing:.8em; margin-bottom:10px;
   text-shadow:0 0 16px rgba(176,58,46,.9); }
 #titleMain { font-size:clamp(56px,9vw,108px); letter-spacing:.18em; color:#f3ead2;
