@@ -18,8 +18,6 @@
 
 **[https://sigco3111.github.io/mingmo-game-korea/](https://sigco3111.github.io/mingmo-game-korea/)**
 
-> 원본 게임 라이브: [https://showibin.github.io/MingMo-Game/](https://showibin.github.io/MingMo-Game/)
-
 ---
 
 ## 📜 원작 저장소 (Attribution)
@@ -31,8 +29,6 @@
 | **원작** | [ShowiBin/MingMo-Game](https://github.com/ShowiBin/MingMo-Game) |
 | **원작자** | [ShowiBin](https://github.com/ShowiBin) |
 | **원작 라이선스** | MIT (별도 표기 시) / 본 저장소는 원작 표시 + 동일한 비영리 조건 유지 |
-| **원작 데모** | <https://showibin.github.io/MingMo-Game/> |
-| **한국어화 저장소** | [sigco3111/mingmo-game-korea](https://github.com/sigco3111/mingmo-game-korea) |
 | **한국어화 작업** | sigco3111 (한국어 UI/대화/사료/타임라인 전체 번역) |
 
 원작의 모든 게임 로직, 그래픽, 사운드, 월드 디자인은 그대로 유지되었으며,
