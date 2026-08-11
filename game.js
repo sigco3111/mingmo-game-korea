@@ -1541,7 +1541,12 @@ document.getElementById('btnToTitle').onclick = () => location.reload();
 
 /* ---------------- 키 입력 분배 ---------------- */
 function onKey(code) {
-  if (state === 'title') { if (code === 'Enter') startGame(false); return; }
+  if (state === 'title') {
+    // 타이틀 화면에서 도움말 패널이 떠 있으면 Esc로 닫기 가능
+    if (code === 'Escape' && panelOpen) { closePanels(); return; }
+    if (code === 'Enter') startGame(false);
+    return;
+  }
   if (state === 'cutscene') { if (['KeyE', 'Enter', 'Space'].includes(code)) advCut(); return; }
   if (state === 'dead') { if (code === 'Enter') respawn(); return; }
   if (state === 'end') return;
