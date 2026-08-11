@@ -1,0 +1,173 @@
+/* ============ 明末 · 侠客行 —— 水墨暗色 UI ============ */
+* { margin:0; padding:0; box-sizing:border-box; }
+html,body { width:100%; height:100%; overflow:hidden; background:#07080c;
+  font-family:"Kaiti SC","STKaiti","KaiTi","楷体","SimSun",serif;
+  color:#e8e0cf; user-select:none; }
+canvas#game { position:fixed; inset:0; display:block; cursor:crosshair; }
+.hidden { display:none !important; }
+
+/* ---------- 通用面板 ---------- */
+.panel { position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+  min-width:520px; max-width:min(860px,92vw); max-height:86vh; overflow-y:auto;
+  background:linear-gradient(160deg, rgba(16,18,26,.96), rgba(10,11,16,.96));
+  border:1px solid rgba(201,162,39,.55); border-radius:10px;
+  box-shadow:0 0 60px rgba(0,0,0,.8), inset 0 0 40px rgba(201,162,39,.05);
+  padding:28px 34px; z-index:60; animation:panelIn .25s ease-out; }
+@keyframes panelIn { from { opacity:0; transform:translate(-50%,-48%) scale(.97);} to { opacity:1; transform:translate(-50%,-50%) scale(1);} }
+.panel h2 { color:#c9a227; letter-spacing:.35em; text-align:center; font-size:24px;
+  padding-bottom:14px; margin-bottom:14px; border-bottom:1px solid rgba(201,162,39,.35); }
+.panelClose { text-align:center; margin-top:16px; color:#8a8574; font-size:13px; letter-spacing:.2em; }
+.panel::-webkit-scrollbar { width:8px; } .panel::-webkit-scrollbar-thumb { background:rgba(201,162,39,.4); border-radius:4px; }
+
+.inkBtn { font-family:inherit; font-size:19px; letter-spacing:.3em; padding:12px 38px;
+  color:#e8e0cf; background:linear-gradient(180deg, rgba(176,58,46,.9), rgba(120,32,26,.9));
+  border:1px solid rgba(255,200,120,.5); border-radius:6px; cursor:pointer;
+  box-shadow:0 4px 18px rgba(0,0,0,.6); transition:all .15s; }
+.inkBtn:hover { transform:translateY(-2px); filter:brightness(1.25); box-shadow:0 6px 26px rgba(176,58,46,.45); }
+.inkBtn.ghost { background:rgba(255,255,255,.06); border-color:rgba(201,162,39,.5); }
+
+/* ---------- HUD ---------- */
+#hud > div, #hud canvas { position:fixed; z-index:20; }
+#statusPanel { left:22px; top:20px; display:flex; align-items:center; gap:12px; }
+#lvlBadge { width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:26px; color:#ffe9a8; background:radial-gradient(circle at 35% 30%, #3a3f52, #14161f);
+  border:2px solid #c9a227; box-shadow:0 0 18px rgba(201,162,39,.45); }
+.barWrap { display:flex; align-items:center; gap:6px; margin:3px 0; }
+.barLabel { font-size:13px; color:#bdb49b; width:30px; letter-spacing:.1em; }
+.bar { width:220px; height:14px; background:rgba(0,0,0,.65); border:1px solid rgba(255,255,255,.22);
+  border-radius:7px; overflow:hidden; }
+.bar div { height:100%; width:100%; transition:width .18s; border-radius:6px; }
+#hpFill { background:linear-gradient(90deg,#7d1f16,#e0463a); box-shadow:0 0 10px rgba(224,70,58,.7); }
+#stFill { background:linear-gradient(90deg,#0f5e52,#2fd6bd); box-shadow:0 0 10px rgba(47,214,189,.7); }
+#xpFill { background:linear-gradient(90deg,#7a5c14,#e8c04a); width:0%; }
+#scrollCount { margin-left:8px; color:#c9a227; font-size:15px; letter-spacing:.15em;
+  text-shadow:0 0 8px rgba(201,162,39,.6); }
+
+#questTracker { left:22px; top:112px; max-width:320px; padding:12px 16px;
+  background:linear-gradient(90deg, rgba(10,12,18,.82), rgba(10,12,18,.35) 80%, transparent);
+  border-left:3px solid #c9a227; border-radius:4px; }
+#questTitle { color:#e8c04a; font-size:17px; letter-spacing:.2em; margin-bottom:4px; }
+#questDesc { color:#cfc7b0; font-size:14px; line-height:1.55; }
+
+#skills { left:50%; bottom:26px; transform:translateX(-50%); display:flex; gap:18px; }
+.skill { position:relative; width:64px; height:64px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #2b3040, #101218);
+  border:2px solid rgba(201,162,39,.75); display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 16px rgba(0,0,0,.7); }
+.skill span { font-size:27px; color:#ffe9a8; text-shadow:0 0 10px rgba(232,192,74,.8); }
+.skill em { position:absolute; bottom:-18px; left:50%; transform:translateX(-50%);
+  font-style:normal; font-size:11px; color:#9a937d; white-space:nowrap; }
+.skill .cd { position:absolute; inset:0; border-radius:50%; background:rgba(4,5,8,.78);
+  transform-origin:bottom; transform:scaleY(0); pointer-events:none; }
+
+#minimap { right:20px; top:20px; width:200px; height:200px; border-radius:50%;
+  border:2px solid rgba(201,162,39,.7); box-shadow:0 0 24px rgba(0,0,0,.8), inset 0 0 30px rgba(0,0,0,.6);
+  background:#0b0d12; }
+#keysHint { right:26px; top:232px; font-size:12px; color:#8a8574; letter-spacing:.1em; text-align:right; }
+
+#notify { position:fixed; top:90px; left:50%; transform:translateX(-50%); z-index:40;
+  list-style:none; text-align:center; pointer-events:none; }
+#notify li { margin:6px 0; padding:8px 26px; display:inline-block; clear:both;
+  background:rgba(12,13,19,.88); border:1px solid rgba(201,162,39,.6); border-radius:20px;
+  color:#ffe9a8; font-size:16px; letter-spacing:.15em;
+  box-shadow:0 0 20px rgba(201,162,39,.25); animation:noteIn .3s ease-out; }
+#notify li.red { color:#ff9d8f; border-color:rgba(224,70,58,.6); }
+@keyframes noteIn { from { opacity:0; transform:translateY(-12px);} to { opacity:1; transform:none;} }
+#notify li.out { opacity:0; transition:opacity .6s; }
+
+/* ---------- 对话框 ---------- */
+#dlg { position:fixed; left:50%; bottom:110px; transform:translateX(-50%);
+  width:min(760px,90vw); z-index:35; padding:18px 26px 14px;
+  background:linear-gradient(180deg, rgba(14,16,23,.94), rgba(9,10,15,.94));
+  border:1px solid rgba(201,162,39,.5); border-radius:8px;
+  box-shadow:0 10px 40px rgba(0,0,0,.75); }
+#dlgName { color:#e8c04a; font-size:18px; letter-spacing:.25em; margin-bottom:8px;
+  border-bottom:1px dashed rgba(201,162,39,.3); padding-bottom:6px; }
+#dlgText { font-size:17px; line-height:1.8; color:#e6ddc6; min-height:58px; }
+#dlgHint { text-align:right; color:#8a8574; font-size:12px; margin-top:6px; animation:blink 1.2s infinite; }
+@keyframes blink { 50% { opacity:.3; } }
+
+/* ---------- 过场 ---------- */
+#cutscene { position:fixed; inset:0; z-index:50; background:rgba(4,4,7,.88);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+#cutYear { font-size:30px; color:#b03a2e; letter-spacing:.6em; margin-bottom:26px;
+  text-shadow:0 0 24px rgba(176,58,46,.8); }
+#cutText { max-width:720px; font-size:22px; line-height:2.1; color:#e8e0cf; letter-spacing:.12em;
+  padding:0 30px; text-shadow:0 2px 12px #000; }
+#cutHint { position:absolute; bottom:60px; color:#8a8574; font-size:14px; animation:blink 1.2s infinite; }
+
+/* ---------- 标题 ---------- */
+#title { position:fixed; inset:0; z-index:70; display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(ellipse at 50% 30%, rgba(30,26,32,.25), rgba(4,5,8,.72) 75%); }
+#titleInner { text-align:center; animation:titleIn 1.2s ease-out; }
+@keyframes titleIn { from { opacity:0; transform:translateY(24px);} to { opacity:1; transform:none;} }
+#titleEra { color:#b03a2e; font-size:22px; letter-spacing:.8em; margin-bottom:10px;
+  text-shadow:0 0 16px rgba(176,58,46,.9); }
+#titleMain { font-size:clamp(56px,9vw,108px); letter-spacing:.18em; color:#f3ead2;
+  text-shadow:0 0 12px rgba(201,162,39,.55), 0 0 55px rgba(201,162,39,.3), 0 6px 30px #000;
+  animation:glowPulse 3s ease-in-out infinite; }
+@keyframes glowPulse { 50% { text-shadow:0 0 22px rgba(232,192,74,.9), 0 0 80px rgba(201,162,39,.45), 0 6px 30px #000; } }
+#titleSub { margin-top:12px; color:#bdb49b; font-size:18px; letter-spacing:.5em; }
+#titleBtns { margin-top:44px; display:flex; gap:22px; justify-content:center; }
+#titleFoot { margin-top:46px; color:#8a8574; font-size:14px; line-height:2; letter-spacing:.15em; }
+
+/* ---------- 时间线 ---------- */
+#timelineList { display:flex; flex-direction:column; gap:0; }
+.tlItem { display:flex; gap:16px; padding:9px 6px; border-left:2px solid rgba(201,162,39,.35);
+  position:relative; margin-left:64px; opacity:.45; }
+.tlItem.unlock { opacity:1; }
+.tlItem::before { content:""; position:absolute; left:-7px; top:16px; width:12px; height:12px;
+  border-radius:50%; background:#3a3f52; border:2px solid #c9a227; }
+.tlItem.unlock::before { background:#e8c04a; box-shadow:0 0 12px rgba(232,192,74,.9); }
+.tlYear { position:absolute; left:-72px; top:8px; width:58px; text-align:right;
+  color:#e8c04a; font-size:15px; }
+.tlText { font-size:15px; line-height:1.6; color:#d8cfb8; }
+
+/* ---------- 史册残卷 ---------- */
+#scrollGrid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.scrollSlot { aspect-ratio:3/4; border:1px solid rgba(201,162,39,.4); border-radius:6px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  background:rgba(255,255,255,.03); cursor:pointer; transition:all .15s; padding:8px; text-align:center; }
+.scrollSlot:hover { background:rgba(201,162,39,.12); transform:translateY(-3px); }
+.scrollSlot.locked { opacity:.3; cursor:default; }
+.scrollSlot .ico { font-size:34px; }
+.scrollSlot .nm { font-size:13px; color:#cfc7b0; line-height:1.4; }
+#scrollReader { position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:65;
+  width:min(640px,90vw); padding:34px 40px; cursor:pointer;
+  background:linear-gradient(170deg,#efe6cf,#e3d7b8); color:#2a2118;
+  border-radius:4px; box-shadow:0 20px 80px rgba(0,0,0,.85), inset 0 0 60px rgba(120,90,40,.15);
+  animation:panelIn .25s ease-out; }
+#srTitle { font-size:22px; letter-spacing:.3em; text-align:center; margin-bottom:18px;
+  color:#6b1f14; border-bottom:1px solid rgba(107,31,20,.4); padding-bottom:12px; }
+#srText { font-size:17px; line-height:2.1; letter-spacing:.08em; }
+#scrollReader .panelClose { color:#8a7a55; }
+
+/* ---------- 帮助 ---------- */
+.helpGrid { display:grid; grid-template-columns:1fr 1fr; gap:12px 26px; }
+.helpGrid div { display:flex; gap:14px; align-items:baseline; padding:6px 0;
+  border-bottom:1px dashed rgba(201,162,39,.2); }
+.helpGrid b { color:#e8c04a; min-width:96px; font-size:15px; }
+.helpGrid span { color:#cfc7b0; font-size:14px; }
+.pauseBtns { display:flex; flex-direction:column; gap:14px; align-items:center; }
+
+/* ---------- 死亡 / 结局 ---------- */
+#deadPanel { position:fixed; inset:0; z-index:68; background:rgba(10,4,4,.82);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; }
+#deadPanel h1 { font-size:120px; color:#b03a2e; letter-spacing:.3em;
+  text-shadow:0 0 60px rgba(176,58,46,.8); animation:titleIn 1s; }
+#deadPanel p { color:#cfc7b0; letter-spacing:.3em; }
+#endPanel { position:fixed; inset:0; z-index:68; background:rgba(4,5,8,.9);
+  display:flex; align-items:center; justify-content:center; }
+#endInner { text-align:center; max-width:640px; animation:titleIn 1.4s; }
+#endInner h1 { font-size:46px; color:#e8c04a; letter-spacing:.25em; margin-bottom:30px;
+  text-shadow:0 0 40px rgba(232,192,74,.6); }
+#endStats { display:flex; gap:34px; justify-content:center; margin-bottom:30px; }
+#endStats div { text-align:center; }
+#endStats .num { font-size:38px; color:#ffe9a8; }
+#endStats .lab { font-size:14px; color:#8a8574; letter-spacing:.2em; margin-top:4px; }
+#endWords { color:#cfc7b0; font-size:17px; line-height:2.2; margin-bottom:34px; letter-spacing:.15em; }
+
+@media (max-width:900px) {
+  #questTracker { display:none; }
+  #scrollGrid { grid-template-columns:repeat(2,1fr); }
+}
