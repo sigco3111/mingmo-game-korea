@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>명말 · 협객행 —— 갑신 1644</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<!-- ===================== HUD ===================== -->
+<div id="hud" class="hidden">
+  <div id="statusPanel">
+    <div id="lvlBadge">일</div>
+    <div id="bars">
+      <div class="barWrap"><div class="barLabel">기혈</div><div class="bar hpBar"><div id="hpFill"></div></div></div>
+      <div class="barWrap"><div class="barLabel">내력</div><div class="bar stBar"><div id="stFill"></div></div></div>
+      <div class="barWrap"><div class="barLabel">연마</div><div class="bar xpBar"><div id="xpFill"></div></div></div>
+    </div>
+    <div id="scrollCount">잔권 0/8</div>
+  </div>
+
+  <div id="questTracker">
+    <div id="questTitle">임무</div>
+    <div id="questDesc"></div>
+  </div>
+
+  <div id="skills">
+    <div class="skill" id="skAtk"><span>검</span><div class="cd" id="cdAtk"></div><em>좌클릭/J</em></div>
+    <div class="skill" id="skDash"><span>섬</span><div class="cd" id="cdDash"></div><em>스페이스</em></div>
+    <div class="skill" id="skQ"><span>종</span><div class="cd" id="cdQ"></div><em>Q·만검귀종</em></div>
+  </div>
+
+  <canvas id="minimap" width="200" height="200"></canvas>
+  <div id="keysHint">E 상호작용 · T 타임라인 · L 사적 · Esc 메뉴 · M 음소거</div>
+</div>
+
+<ul id="notify"></ul>
+
+<!-- ===================== 대화 ===================== -->
+<div id="dlg" class="hidden">
+  <div id="dlgName"></div>
+  <div id="dlgText"></div>
+  <div id="dlgHint">E 눌러 계속 ▸</div>
+</div>
+
+<!-- ===================== 컷신 ===================== -->
+<div id="cutscene" class="hidden">
+  <div id="cutYear"></div>
+  <div id="cutText"></div>
+  <div id="cutHint">E 눌러 계속 ▸</div>
+</div>
+
+<!-- ===================== 타이틀 ===================== -->
+<div id="title">
+  <div id="titleInner">
+    <div id="titleEra">숭정 17년 · 갑신</div>
+    <h1 id="titleMain">명말 · 협객행</h1>
+    <div id="titleSub">대사 장궐(넘어지려는) · 산하파쇄 · 일검일사일강호</div>
+    <div id="titleBtns">
+      <button id="btnNew" class="inkBtn">새 여정</button>
+      <button id="btnContinue" class="inkBtn hidden">여정 계속</button>
+      <button id="btnHelpT" class="inkBtn ghost">조작 설명</button>
+    </div>
+    <div id="titleFoot">기원후 1644년, 이자성이 베이징을 함락시키고 숭정제가 殉國하니, 청병이 관내로 들어왔다.<br>그대는 一名(한) 유협이다. 명나라를 구할 수는 없으나, 증언할 수 있다.</div>
+  </div>
+</div>
+
+<!-- ===================== 패널: 타임라인 ===================== -->
+<div id="timelinePanel" class="panel hidden">
+  <h2>명망흥체 · 대사기</h2>
+  <div id="timelineList"></div>
+  <div class="panelClose">T 또는 Esc로 닫기</div>
+</div>
+
+<!-- ===================== 패널: 사적잔권 ===================== -->
+<div id="scrollPanel" class="panel hidden">
+  <h2>사적잔권 <span id="scrollProg"></span></h2>
+  <div id="scrollGrid"></div>
+  <div class="panelClose">L 또는 Esc로 닫기 · 잔권 클릭하면 원문 열람</div>
+</div>
+<div id="scrollReader" class="hidden">
+  <div id="srTitle"></div>
+  <div id="srText"></div>
+  <div class="panelClose">아무 곳이나 클릭하면 돌아감</div>
+</div>
+
+<!-- ===================== 패널: 도움말 / 일시정지 ===================== -->
+<div id="helpPanel" class="panel hidden">
+  <h2>조작 설명</h2>
+  <div class="helpGrid">
+    <div><b>W A S D</b><span>강호 行走(걸어다님)</span></div>
+    <div><b>마우스 / J</b><span>검 휘두르기 (마우스 방향으로 검기 발사)</span></div>
+    <div><b>스페이스 / K</b><span>경공 회피 (내력 소모, 잠시 무적)</span></div>
+    <div><b>Q</b><span>필살기 · 만검귀종</span></div>
+    <div><b>E</b><span>대화 / 상호작용</span></div>
+    <div><b>T</b><span>명말 대사 타임라인</span></div>
+    <div><b>L</b><span>사적잔권 (천하에 흩어진 사료 수집)</span></div>
+    <div><b>M</b><span>음소거 토글</span></div>
+    <div><b>Esc</b><span>일시정지 / 돌아가기</span></div>
+  </div>
+  <div class="panelClose">Esc로 닫기</div>
+</div>
+
+<div id="pausePanel" class="panel hidden">
+  <h2>일시정지</h2>
+  <div class="pauseBtns">
+    <button class="inkBtn" id="btnResume">계속</button>
+    <button class="inkBtn ghost" id="btnHelpP">조작 설명</button>
+    <button class="inkBtn ghost" id="btnToTitle">타이틀로 돌아가기</button>
+  </div>
+</div>
+
+<!-- ===================== 사망 / 결말 ===================== -->
+<div id="deadPanel" class="hidden">
+  <h1>운명</h1>
+  <p>장志(뜻) 未酬(다 이루지 못한 채) 몸이 먼저 죽도다……</p>
+  <button class="inkBtn" id="btnRespawn">현地点(그 자리) 소생 (찻집에서 깨어남)</button>
+</div>
+
+<div id="endPanel" class="hidden">
+  <div id="endInner">
+    <h1>청사여진 · 협골장存(길이 남다)</h1>
+    <div id="endStats"></div>
+    <p id="endWords">후세의 역사를 읽는 이들은 제왕장상을 보지만,<br>이야기꾼이 역사를 쓰면, 그 무릎 꿇지 않는 자들을 기록하리라.</p>
+    <button class="inkBtn" id="btnAgain">다시 강호로</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
